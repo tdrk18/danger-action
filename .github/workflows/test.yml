@@ -10,7 +10,8 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - uses: ./
+      - name: Run danger-action
+        uses: ./
         with:
           gemfile: test/Gemfile
           dangerfile: test/Dangerfile
