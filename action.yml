@@ -43,15 +43,18 @@ runs:
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
+      env:
+        BUNDLE_GEMFILE: ${{ inputs.gemfile }}
       with:
         ruby-version: ${{ steps.ruby-version.outputs.version }}
         bundler-cache: ${{ inputs.cache }}
-        gemfile: ${{ inputs.gemfile }}
 
     - name: Install gems
       if: inputs.cache == 'false'
       shell: bash
-      run: bundle install --gemfile=${{ inputs.gemfile }}
+      env:
+        BUNDLE_GEMFILE: ${{ inputs.gemfile }}
+      run: bundle install
 
     - name: Fetch branches for Danger
       shell: bash
@@ -61,4 +64,5 @@ runs:
       shell: bash
       env:
         DANGER_GITHUB_API_TOKEN: ${{ inputs.github-token }}
+        BUNDLE_GEMFILE: ${{ inputs.gemfile }}
       run: bundle exec danger --dangerfile=${{ inputs.dangerfile }} --danger_id=${{ inputs.danger-id }}
