@@ -1,5 +1,8 @@
 name: 'danger-ruby-action'
 description: 'Run Danger with Ruby setup and branch pre-fetch'
+branding:
+  icon: zap
+  color: yellow
 inputs:
   ruby-version:
     description: 'Ruby version to use. Reads from .ruby-version if not specified.'
