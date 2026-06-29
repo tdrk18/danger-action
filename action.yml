@@ -1,0 +1,64 @@
+name: 'danger-action'
+description: 'Run Danger with Ruby setup and branch pre-fetch'
+inputs:
+  ruby-version:
+    description: 'Ruby version to use. Reads from .ruby-version if not specified.'
+    required: false
+    default: ''
+  gemfile:
+    description: 'Path to Gemfile'
+    required: false
+    default: 'Gemfile'
+  dangerfile:
+    description: 'Path to Dangerfile'
+    required: false
+    default: 'Dangerfile'
+  danger-id:
+    description: 'Danger ID passed to --danger_id'
+    required: false
+    default: 'danger'
+  cache:
+    description: 'Enable bundler cache'
+    required: false
+    default: 'true'
+  github-token:
+    description: 'GitHub token passed to DANGER_GITHUB_API_TOKEN'
+    required: false
+    default: ${{ github.token }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Determine Ruby version
+      id: ruby-version
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.ruby-version }}" ]; then
+          echo "version=${{ inputs.ruby-version }}" >> $GITHUB_OUTPUT
+        elif [ -f ".ruby-version" ]; then
+          echo "version=$(cat .ruby-version)" >> $GITHUB_OUTPUT
+        else
+          echo "version=4" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ steps.ruby-version.outputs.version }}
+        bundler-cache: ${{ inputs.cache }}
+        gemfile: ${{ inputs.gemfile }}
+
+    - name: Install gems
+      if: inputs.cache == 'false'
+      shell: bash
+      run: bundle install --gemfile=${{ inputs.gemfile }}
+
+    - name: Fetch branches for Danger
+      shell: bash
+      run: git fetch origin $GITHUB_BASE_REF $GITHUB_HEAD_REF
+
+    - name: Run Danger
+      shell: bash
+      env:
+        DANGER_GITHUB_API_TOKEN: ${{ inputs.github-token }}
+      run: bundle exec danger --dangerfile=${{ inputs.dangerfile }} --danger_id=${{ inputs.danger-id }}
