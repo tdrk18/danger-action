@@ -1,4 +1,4 @@
-name: 'danger-action'
+name: 'danger-ruby-action'
 description: 'Run Danger with Ruby setup and branch pre-fetch'
 inputs:
   ruby-version:
