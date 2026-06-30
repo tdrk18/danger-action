@@ -28,6 +28,10 @@ inputs:
     description: 'Should fail the build process if no PR is found'
     required: false
     default: 'false'
+  new-comment:
+    description: 'Makes Danger post a new comment instead of editing its previous one'
+    required: false
+    default: 'false'
   cache:
     description: 'Enable bundler cache'
     required: false
@@ -76,4 +80,10 @@ runs:
       env:
         DANGER_GITHUB_API_TOKEN: ${{ inputs.github-token }}
         BUNDLE_GEMFILE: ${{ inputs.gemfile }}
-      run: bundle exec danger --dangerfile=${{ inputs.dangerfile }} --danger_id=${{ inputs.danger-id }} --fail-on-errors=${{ inputs.fail-on-errors }} --fail-if-no-pr=${{ inputs.fail-if-no-pr }}
+      run: |
+        bundle exec danger \
+          --dangerfile=${{ inputs.dangerfile }} \
+          --danger_id=${{ inputs.danger-id }} \
+          --fail-on-errors=${{ inputs.fail-on-errors }} \
+          --fail-if-no-pr=${{ inputs.fail-if-no-pr }} \
+          ${{ inputs.new-comment == 'true' && '--new-comment' || '' }}
