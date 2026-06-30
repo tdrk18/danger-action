@@ -32,6 +32,10 @@ inputs:
     description: 'Makes Danger post a new comment instead of editing its previous one'
     required: false
     default: 'false'
+  remove-previous-comments:
+    description: 'Removes all previous comments and creates a new one at the end of the list'
+    required: false
+    default: 'false'
   cache:
     description: 'Enable bundler cache'
     required: false
@@ -86,4 +90,5 @@ runs:
           --danger_id=${{ inputs.danger-id }} \
           --fail-on-errors=${{ inputs.fail-on-errors }} \
           --fail-if-no-pr=${{ inputs.fail-if-no-pr }} \
-          ${{ inputs.new-comment == 'true' && '--new-comment' || '' }}
+          ${{ inputs.new-comment == 'true' && '--new-comment' || '' }} \
+          ${{ inputs.remove-previous-comments == 'true' && '--remove-previous-comments' || '' }}
