@@ -20,6 +20,10 @@ inputs:
     description: 'Danger ID passed to --danger_id'
     required: false
     default: 'danger'
+  fail-on-errors:
+    description: 'Should always fail the build process when Danger reports errors'
+    required: false
+    default: 'false'
   cache:
     description: 'Enable bundler cache'
     required: false
@@ -68,4 +72,4 @@ runs:
       env:
         DANGER_GITHUB_API_TOKEN: ${{ inputs.github-token }}
         BUNDLE_GEMFILE: ${{ inputs.gemfile }}
-      run: bundle exec danger --dangerfile=${{ inputs.dangerfile }} --danger_id=${{ inputs.danger-id }}
+      run: bundle exec danger --dangerfile=${{ inputs.dangerfile }} --danger_id=${{ inputs.danger-id }} --fail-on-errors=${{ inputs.fail-on-errors }}
