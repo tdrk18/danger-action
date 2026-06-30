@@ -36,6 +36,10 @@ inputs:
     description: 'Removes all previous comments and creates a new one at the end of the list'
     required: false
     default: 'false'
+  base:
+    description: 'A branch/tag/commit to use as the base of the diff'
+    required: false
+    default: ''
   cache:
     description: 'Enable bundler cache'
     required: false
@@ -91,4 +95,5 @@ runs:
           --fail-on-errors=${{ inputs.fail-on-errors }} \
           --fail-if-no-pr=${{ inputs.fail-if-no-pr }} \
           ${{ inputs.new-comment == 'true' && '--new-comment' || '' }} \
-          ${{ inputs.remove-previous-comments == 'true' && '--remove-previous-comments' || '' }}
+          ${{ inputs.remove-previous-comments == 'true' && '--remove-previous-comments' || '' }} \
+          ${{ inputs.base != '' && format('--base={0}', inputs.base) || '' }}
