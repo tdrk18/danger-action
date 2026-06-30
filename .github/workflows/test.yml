@@ -16,3 +16,59 @@ jobs:
         with:
           gemfile: test/Gemfile
           dangerfile: test/Dangerfile
+
+  test-fail-on-errors:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run danger-action with fail-on-errors
+        uses: ./
+        with:
+          gemfile: test/Gemfile
+          dangerfile: test/Dangerfile
+          fail-on-errors: 'true'
+
+  test-fail-if-no-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run danger-action with fail-if-no-pr
+        uses: ./
+        with:
+          gemfile: test/Gemfile
+          dangerfile: test/Dangerfile
+          fail-if-no-pr: 'true'
+
+  test-new-comment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run danger-action with new-comment
+        uses: ./
+        with:
+          gemfile: test/Gemfile
+          dangerfile: test/Dangerfile
+          new-comment: 'true'
+
+  test-remove-previous-comments:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run danger-action with remove-previous-comments
+        uses: ./
+        with:
+          gemfile: test/Gemfile
+          dangerfile: test/Dangerfile
+          remove-previous-comments: 'true'
